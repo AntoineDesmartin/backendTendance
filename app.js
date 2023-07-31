@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var publishScreenRouter = require('./routes/publishScreen');
+var mapListScreenRouter = require('./routes/mapListScreen');
 
 var app = express();
 
@@ -19,5 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', publishScreenRouter) ; 
+app.use('/', mapListScreenRouter);  
+
 
 module.exports = app;
