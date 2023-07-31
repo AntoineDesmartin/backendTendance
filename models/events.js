@@ -8,6 +8,8 @@ const eventSchema = mongoose.Schema({
     hourStart: Date,
     hourEnd: Date,
     address: String,
+    latitude: Number,
+    longitude: Number,
     price: Number,
     website: String,
     description: String,
