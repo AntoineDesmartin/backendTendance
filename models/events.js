@@ -14,10 +14,10 @@ const eventSchema = mongoose.Schema({
     website: String,
     description: String,
     eventCover: String,
-    users: [{
-        interUsers: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-        partUsers: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-    }],
+    users: {
+        interUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+        partUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+    },
 });
 
 const Event = mongoose.model('events', eventSchema);

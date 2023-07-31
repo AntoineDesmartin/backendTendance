@@ -7,10 +7,10 @@ const userSchema = mongoose.Schema({
     email: String,
     profilePic: String,
     coverPic: String,
-    events: [{
-        interEvents: { type: mongoose.Schema.Types.ObjectId, ref: 'events' },
-        partEvents: { type: mongoose.Schema.Types.ObjectId, ref: 'events' },
-    }],
+    events: {
+        interEvents:[{ type: mongoose.Schema.Types.ObjectId, ref: 'events' }],
+        partEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'events' }],
+    },
 });
 
 const User = mongoose.model('users', userSchema);
