@@ -9,7 +9,8 @@ const { checkBody } = require("../modules/checkBody");
 
 
 
-//POST /places : ajout d’un event en base de données (via req.body)
+//!__________POST /places : ajout d’un event en base de données (via req.body)__________________________
+
 router.post("/publishEvent", async (req, res) => {
   const addressToLocate = req.body.address;
   // Encoder l'adresse pour gérer les espaces et intégrer l'adresse à l'url d'interrogation de l'API
@@ -68,5 +69,19 @@ router.post("/publishEvent", async (req, res) => {
     });
     
 });
+
+
+//! ____________________________GET all events_________________________________________________________ 
+router.get("/events", async function (req, res) {
+    try {
+        const events = await Event.find({});
+        res.json(events);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch events" });
+    }
+});
+
+
+//todo modifier lorsquon participe ou on interrese
 
 module.exports = router;

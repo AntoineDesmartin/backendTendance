@@ -5,10 +5,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var publishScreenRouter = require('./routes/publishScreen');
-var mapListScreenRouter = require('./routes/mapListScreen');
-var mapScreenRouter = require('./routes/mapScreen');
+
+
+var eventsRouter = require("./routes/events")
+var userRouter = require("./routes/user")
 
 var app = express();
 
@@ -21,10 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/', publishScreenRouter) ; 
-app.use('/', mapListScreenRouter);  
-app.use('/', mapScreenRouter);  
 
+
+
+app.use('/events', eventsRouter);
+app.use('/user', userRouter); 
 
 module.exports = app;
