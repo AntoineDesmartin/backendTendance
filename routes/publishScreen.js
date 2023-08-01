@@ -7,9 +7,7 @@ const Event = require("../models/events");
 const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 
-router.get("/test", (req, res) => {
-  res.send("Test route reached successfully");
-});
+
 
 //POST /places : ajout d’un event en base de données (via req.body)
 router.post("/publishEvent", async (req, res) => {
