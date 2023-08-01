@@ -82,6 +82,8 @@ router.get("/events", async function (req, res) {
 });
 
 
-//todo modifier lorsquon participe ou on interrese
+
+
+
 
 module.exports = router;

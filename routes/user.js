@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 require("../models/connection");
-require("../models/connection");
+
 
 const User = require("../models/users");                      
+const Event = require("../models/events");
 
 const { checkBody } = require("../modules/checkBody");  
 
@@ -15,8 +16,7 @@ const bcrypt = require("bcrypt");
 
 
 
-//!______________SIGNUP_____________________________________________________________________________
-
+//!SIGNUP____________________________________________________________________________________________________
 
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["username","email", "password"])) {
@@ -53,53 +53,63 @@ router.post("/signup", (req, res) => {
   });
 });
 
-
-
-//!_____________________SIGNIN________________________________________________________________________
+//!SIGNIN____________________________________________________________________________________________________
 
 
 router.post("/signin", (req, res) => {
+    
   if (!checkBody(req.body, ["username","email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
+ 
   User.findOne({ username: req.body.username }).then((data) => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      // res.json(data)
+      
       res.json({
         result: true,
-        data
+        data:data
       });
     } else {
+       
       res.json({ result: false, error: "User not found or wrong password" });
     }
   });
 });
 
 
-//! ___________________AJOUT INTERRESTED________________________________________________________________
-
+//!ADD and REMOVE INTERRESTED_________________________________________________________________________________
 
 router.post("/interested",(req,res)=>{
     
-    User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.interEvents': req.body.idUser } }).then(data=>{
+    User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.interEvents': req.body.idEvent } }).then(data=>{
         res.json(data);
     })
+    Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.interUsers': req.body.idUser } }).then(data=>{
+        res.json(data);
+    })
+
 })
 
 router.post("/notInterested",(req,res)=>{
-    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.interEvents': req.body.idUser } }).then(data=>{
+    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.interEvents': req.body.idEvent } }).then(data=>{
+        res.json(data);
+    })
+    Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.interUsers': req.body.idUser } }).then(data=>{
         res.json(data);
     })
 })
 
 
-//! ___________________AJOUT PARTICIPATION______________________________________________________________
+//!ADD and REMOVE PARTICIPATION______________________________________________________________________________
 
 router.post("/participated",(req,res)=>{
     
     User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.partEvents': req.body.idEvent } }).then(data=>{
+        res.json(data);
+    })
+    Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.partUsers': req.body.idUser } }).then(data=>{
         res.json(data);
     })
 
@@ -107,17 +117,20 @@ router.post("/participated",(req,res)=>{
 
 router.post("/notParticipated",(req,res)=>{
 
-    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.partEvents': req.body.idUser } }).then(data=>{
+    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.partEvents': req.body.idEvent } }).then(data=>{
+        res.json(data);
+    })
+    Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.partUsers': req.body.idUser } }).then(data=>{
         res.json(data);
     })
 
 })
 
-//! On fetch les Event auxquelle on participe (populate)
 
 
+//! On fetch les Event auxquelle on participe________________________________________________________________
 
-router.get("/mesEvents",(req,res)=>{
+router.post("/mesEvents",(req,res)=>{
 
     User.findOne({_id:req.body.idUser}).populate("events.partEvents").then(data=>{
         res.json(data.events.partEvents);
@@ -134,8 +147,3 @@ router.get("/mesEvents",(req,res)=>{
 
 module.exports = router;
 
-
-//todo 
-//? quand on login et se connect 
-//? on ajoute quand on est interrese par un event ou on participe
-//? 
