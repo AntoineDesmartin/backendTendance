@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var publishScreenRouter = require('./routes/publishScreen');
 var mapListScreenRouter = require('./routes/mapListScreen');
+var mapScreenRouter = require('./routes/mapScreen');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/', publishScreenRouter) ; 
 app.use('/', mapListScreenRouter);  
+app.use('/', mapScreenRouter);  
 
 
 module.exports = app;
