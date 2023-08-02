@@ -110,7 +110,7 @@ router.post("/interested", (req, res) => {
       result.interestedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
-          { $push: { 'events.interUsers': req.body.idUser } }
+          { $push: { 'users.interUsers': req.body.idUser } }
       ).then(data => {
           result.eventUpdate = data; 
           res.json(result); 
@@ -128,7 +128,7 @@ router.post("/notInterested", (req, res) => {
       result.notInterestedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
-          { $pull: { 'events.interUsers': req.body.idUser } }
+          { $pull: { 'users.interUsers': req.body.idUser } }
       ).then(data => {
           result.eventUpdate = data; 
           res.json(result);
@@ -169,7 +169,7 @@ router.post("/participated", (req, res) => {
       result.participatedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
-          { $push: { 'events.partUsers': req.body.idUser } }
+          { $push: { 'users.partUsers': req.body.idUser } }
       ).then(data => {
           result.eventUpdate = data; 
           res.json(result); 
@@ -187,7 +187,7 @@ router.post("/notParticipated", (req, res) => {
       result.participatedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
-          { $pull: { 'events.partUsers': req.body.idUser } }
+          { $pull: { 'users.partUsers': req.body.idUser } }
       ).then(data => {
           result.eventUpdate = data; 
           res.json(result); 
