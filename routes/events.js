@@ -12,7 +12,7 @@ const { checkBody } = require("../modules/checkBody");
 //!__________POST /places : ajout d’un event en base de données (via req.body)__________________________
 
 router.post("/publishEvent", async (req, res) => {
-  res.json(req.body.address);
+  res.json(req.body);
 //   const addressToLocate = req.body.address;
 //   // Encoder l'adresse pour gérer les espaces et intégrer l'adresse à l'url d'interrogation de l'API
 //   const encodedAddressToLocate = encodeURIComponent(addressToLocate);;
