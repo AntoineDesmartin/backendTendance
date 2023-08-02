@@ -107,10 +107,10 @@ router.post("/notInterested",(req,res)=>{
 router.post("/participated",(req,res)=>{
     
     User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.partEvents': req.body.idEvent } }).then(data=>{
-        res.json(data);
+        res.json({result:true});
     })
     Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.partUsers': req.body.idUser } }).then(data=>{
-        res.json(data);
+        res.json({result:true});
     })
 
 })
