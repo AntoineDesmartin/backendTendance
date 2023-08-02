@@ -104,28 +104,62 @@ router.post("/notInterested",(req,res)=>{
 
 //!ADD and REMOVE PARTICIPATION______________________________________________________________________________
 
-router.post("/participated",(req,res)=>{
+// router.post("/participated",(req,res)=>{
     
-    User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.partEvents': req.body.idEvent } }).then(data=>{
-        res.json({result:true});
-    })
-    Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.partUsers': req.body.idUser } }).then(data=>{
-        res.json({result:true});
-    })
+//     User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.partEvents': req.body.idEvent } }).then(data=>{
+//         res.json({result:true});
+//     })
+//     Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.partUsers': req.body.idUser } }).then(data=>{
+//         res.json({result:true});
+//     })
 
-})
+// })
 
-router.post("/notParticipated",(req,res)=>{
+// router.post("/notParticipated",(req,res)=>{
 
-    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.partEvents': req.body.idEvent } }).then(data=>{
-        res.json(data);
-    })
-    Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.partUsers': req.body.idUser } }).then(data=>{
-        res.json(data);
-    })
+//     User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.partEvents': req.body.idEvent } }).then(data=>{
+//         res.json(data);
+//     })
+//     Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.partUsers': req.body.idUser } }).then(data=>{
+//         res.json(data);
+//     })
 
-})
+// })
+router.post("/participated", (req, res) => {
+  let result = {}; // Créez une variable pour stocker le résultat
 
+  User.findOneAndUpdate(
+      { _id: req.body.idUser },
+      { $push: { 'events.partEvents': req.body.idEvent } }
+  ).then(data => {
+      result.participatedUpdate = data; // Stockez le résultat dans la variable
+      Event.findOneAndUpdate(
+          { _id: req.body.idEvent },
+          { $push: { 'events.partUsers': req.body.idUser } }
+      ).then(data => {
+          result.eventUpdate = data; // Stockez le résultat dans la variable
+          res.json(result); // Renvoyez le résultat global
+      });
+  });
+});
+
+router.post("/notParticipated", (req, res) => {
+  let result = {}; // Créez une variable pour stocker le résultat
+
+  User.findOneAndUpdate(
+      { _id: req.body.idUser },
+      { $pull: { 'events.partEvents': req.body.idEvent } }
+  ).then(data => {
+      result.participatedUpdate = data; // Stockez le résultat dans la variable
+      Event.findOneAndUpdate(
+          { _id: req.body.idEvent },
+          { $pull: { 'events.partUsers': req.body.idUser } }
+      ).then(data => {
+          result.eventUpdate = data; // Stockez le résultat dans la variable
+          res.json(result); // Renvoyez le résultat global
+      });
+  });
+});
 
 
 //! On fetch les Event auxquelle on participe________________________________________________________________
