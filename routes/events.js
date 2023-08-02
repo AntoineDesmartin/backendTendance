@@ -67,19 +67,7 @@ router.post("/publishEvent", async (req, res) => {
     
 });
 
-// User.findOneAndUpdate(
-//   { _id: req.body.idUser },
-//   { $push: { 'events.partEvents': req.body.idEvent } }
-// ).then(data => {
-//   result.participatedUpdate = data; // Stockez le résultat dans la variable
-//   Event.findOneAndUpdate(
-//       { _id: req.body.idEvent },
-//       { $push: { 'events.partUsers': req.body.idUser } }
-//   ).then(data => {
-//       result.eventUpdate = data; // Stockez le résultat dans la variable
-//       res.json(result); // Renvoyez le résultat global
-//   });
-// });
+
 
 //! ____________________________GET all events_________________________________________________________ 
 router.get("/events", async function (req, res) {

@@ -101,37 +101,37 @@ router.post("/signin", (req, res) => {
 //     })
 // })
 router.post("/interested", (req, res) => {
-  let result = {}; // Créez une variable pour stocker le résultat
+  let result = {}; 
 
   User.findOneAndUpdate(
       { _id: req.body.idUser },
       { $push: { 'events.interEvents': req.body.idEvent } }
   ).then(data => {
-      result.interestedUpdate = data; // Stockez le résultat dans la variable
+      result.interestedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
           { $push: { 'events.interUsers': req.body.idUser } }
       ).then(data => {
-          result.eventUpdate = data; // Stockez le résultat dans la variable
-          res.json(result); // Renvoyez le résultat global
+          result.eventUpdate = data; 
+          res.json(result); 
       });
   });
 });
 
 router.post("/notInterested", (req, res) => {
-  let result = {}; // Créez une variable pour stocker le résultat
+  let result = {}; 
 
   User.findOneAndUpdate(
       { _id: req.body.idUser },
       { $pull: { 'events.interEvents': req.body.idEvent } }
   ).then(data => {
-      result.notInterestedUpdate = data; // Stockez le résultat dans la variable
+      result.notInterestedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
           { $pull: { 'events.interUsers': req.body.idUser } }
       ).then(data => {
-          result.eventUpdate = data; // Stockez le résultat dans la variable
-          res.json(result); // Renvoyez le résultat global
+          result.eventUpdate = data; 
+          res.json(result);
       });
   });
 });
@@ -160,37 +160,37 @@ router.post("/notInterested", (req, res) => {
 
 // })
 router.post("/participated", (req, res) => {
-  let result = {}; // Créez une variable pour stocker le résultat
+  let result = {}; 
 
   User.findOneAndUpdate(
       { _id: req.body.idUser },
       { $push: { 'events.partEvents': req.body.idEvent } }
   ).then(data => {
-      result.participatedUpdate = data; // Stockez le résultat dans la variable
+      result.participatedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
           { $push: { 'events.partUsers': req.body.idUser } }
       ).then(data => {
-          result.eventUpdate = data; // Stockez le résultat dans la variable
-          res.json(result); // Renvoyez le résultat global
+          result.eventUpdate = data; 
+          res.json(result); 
       });
   });
 });
 
 router.post("/notParticipated", (req, res) => {
-  let result = {}; // Créez une variable pour stocker le résultat
+  let result = {}; 
 
   User.findOneAndUpdate(
       { _id: req.body.idUser },
       { $pull: { 'events.partEvents': req.body.idEvent } }
   ).then(data => {
-      result.participatedUpdate = data; // Stockez le résultat dans la variable
+      result.participatedUpdate = data; 
       Event.findOneAndUpdate(
           { _id: req.body.idEvent },
           { $pull: { 'events.partUsers': req.body.idUser } }
       ).then(data => {
-          result.eventUpdate = data; // Stockez le résultat dans la variable
-          res.json(result); // Renvoyez le résultat global
+          result.eventUpdate = data; 
+          res.json(result); 
       });
   });
 });
