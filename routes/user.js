@@ -81,26 +81,60 @@ router.post("/signin", (req, res) => {
 
 //!ADD and REMOVE INTERRESTED_________________________________________________________________________________
 
-router.post("/interested",(req,res)=>{
+// router.post("/interested",(req,res)=>{
     
-    User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.interEvents': req.body.idEvent } }).then(data=>{
-        res.json(data);
-    })
-    Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.interUsers': req.body.idUser } }).then(data=>{
-        res.json(data);
-    })
+//     User.findOneAndUpdate({_id:req.body.idUser},{ $push: { 'events.interEvents': req.body.idEvent } }).then(data=>{
+//         res.json(data);
+//     })
+//     Event.findOneAndUpdate({_id:req.body.idEvent},{ $push: { 'events.interUsers': req.body.idUser } }).then(data=>{
+//         res.json(data);
+//     })
 
-})
+// })
 
-router.post("/notInterested",(req,res)=>{
-    User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.interEvents': req.body.idEvent } }).then(data=>{
-        res.json(data);
-    })
-    Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.interUsers': req.body.idUser } }).then(data=>{
-        res.json(data);
-    })
-})
+// router.post("/notInterested",(req,res)=>{
+//     User.findOneAndUpdate({_id:req.body.idUser},{ $pull: { 'events.interEvents': req.body.idEvent } }).then(data=>{
+//         res.json(data);
+//     })
+//     Event.findOneAndUpdate({_id:req.body.idEvent},{ $pull: { 'events.interUsers': req.body.idUser } }).then(data=>{
+//         res.json(data);
+//     })
+// })
+router.post("/interested", (req, res) => {
+  let result = {}; // Créez une variable pour stocker le résultat
 
+  User.findOneAndUpdate(
+      { _id: req.body.idUser },
+      { $push: { 'events.interEvents': req.body.idEvent } }
+  ).then(data => {
+      result.interestedUpdate = data; // Stockez le résultat dans la variable
+      Event.findOneAndUpdate(
+          { _id: req.body.idEvent },
+          { $push: { 'events.interUsers': req.body.idUser } }
+      ).then(data => {
+          result.eventUpdate = data; // Stockez le résultat dans la variable
+          res.json(result); // Renvoyez le résultat global
+      });
+  });
+});
+
+router.post("/notInterested", (req, res) => {
+  let result = {}; // Créez une variable pour stocker le résultat
+
+  User.findOneAndUpdate(
+      { _id: req.body.idUser },
+      { $pull: { 'events.interEvents': req.body.idEvent } }
+  ).then(data => {
+      result.notInterestedUpdate = data; // Stockez le résultat dans la variable
+      Event.findOneAndUpdate(
+          { _id: req.body.idEvent },
+          { $pull: { 'events.interUsers': req.body.idUser } }
+      ).then(data => {
+          result.eventUpdate = data; // Stockez le résultat dans la variable
+          res.json(result); // Renvoyez le résultat global
+      });
+  });
+});
 
 //!ADD and REMOVE PARTICIPATION______________________________________________________________________________
 
