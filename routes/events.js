@@ -12,30 +12,31 @@ const { checkBody } = require("../modules/checkBody");
 //!__________POST /places : ajout d’un event en base de données (via req.body)__________________________
 
 router.post("/publishEvent", async (req, res) => {
-  
+  console.log(req.body);
   const addressToLocate = req.body.address;
   // Encoder l'adresse pour gérer les espaces et intégrer l'adresse à l'url d'interrogation de l'API
   const encodedAddressToLocate = encodeURIComponent(addressToLocate);
-  
-  // http://localhost:3000/events/publishEvent
+  // const test = req.body.creatorName
+
   fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodedAddressToLocate}`)
     .then((response) =>  {
         if (!response.ok) {
             throw new Error("Failed to fetch data from the external API");
           }
           return response.json();
+
     })
     .then((data) => {
       const latitude = data.features[0].geometry.coordinates[1];
       const longitude = data.features[0].geometry.coordinates[0];
-      console.log(latitude,longitude);
+      
       if (latitude === undefined || longitude === undefined) {
         res.json({ result: false, error: "Latitude or longitude not found" });
         return;
       }
 
       const newEvent = new Event({
-        creator: req.body.creatorName, //! id du creator trouver dans le reducer id
+        creatorName: req.body.creatorName,
         eventName: req.body.eventName,
         type: req.body.type,
         date: req.body.date,
@@ -56,13 +57,29 @@ router.post("/publishEvent", async (req, res) => {
         
       });
 
-      newEvent.save().then(() => {
-        res.json({ result: true });
+      newEvent.save().then(data => {
+        User.findOneAndUpdate({_id:req.body.creatorName},{ $push: { 'events.partEvents': data._id } }).then(data=>{
+          console.log("update",data);
+        res.json({result:true});
+    })
       });
     });
     
 });
 
+// User.findOneAndUpdate(
+//   { _id: req.body.idUser },
+//   { $push: { 'events.partEvents': req.body.idEvent } }
+// ).then(data => {
+//   result.participatedUpdate = data; // Stockez le résultat dans la variable
+//   Event.findOneAndUpdate(
+//       { _id: req.body.idEvent },
+//       { $push: { 'events.partUsers': req.body.idUser } }
+//   ).then(data => {
+//       result.eventUpdate = data; // Stockez le résultat dans la variable
+//       res.json(result); // Renvoyez le résultat global
+//   });
+// });
 
 //! ____________________________GET all events_________________________________________________________ 
 router.get("/events", async function (req, res) {
