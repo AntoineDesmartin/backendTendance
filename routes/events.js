@@ -12,20 +12,12 @@ const { checkBody } = require("../modules/checkBody");
 //!__________POST /places : ajout d’un event en base de données (via req.body)__________________________
 
 router.post("/publishEvent", async (req, res) => {
-  // res.json(req.body);
+  
   const addressToLocate = req.body.address;
   // Encoder l'adresse pour gérer les espaces et intégrer l'adresse à l'url d'interrogation de l'API
-  const encodedAddressToLocate = encodeURIComponent(addressToLocate);;
-  // const creatorName = await User.findOne({ username: 'Lulu' });  //modifier pour récupérer le username du user connecté ?
-
-  //Compter le nombre de users intéressés et participant à l'event
-//   const countInterUsers = await User.countDocuments({
-//     _id: { $in: req.body.interUsers }, 
-//   });
-//   const countPartUsers = await User.countDocuments({
-//     _id: { $in: req.body.partUsers },
-// });
-
+  const encodedAddressToLocate = encodeURIComponent(addressToLocate);
+  
+  // http://localhost:3000/events/publishEvent
   fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodedAddressToLocate}`)
     .then((response) =>  {
         if (!response.ok) {
@@ -36,7 +28,7 @@ router.post("/publishEvent", async (req, res) => {
     .then((data) => {
       const latitude = data.features[0].geometry.coordinates[1];
       const longitude = data.features[0].geometry.coordinates[0];
-
+      console.log(latitude,longitude);
       if (latitude === undefined || longitude === undefined) {
         res.json({ result: false, error: "Latitude or longitude not found" });
         return;
