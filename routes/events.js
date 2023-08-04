@@ -12,7 +12,7 @@ const { checkBody } = require("../modules/checkBody");
 //!__________POST /places : ajout d’un event en base de données (via req.body)__________________________
 
 router.post("/publishEvent", async (req, res) => {
-  console.log(req.body);
+  console.log(req.body.creatorName);
   const addressToLocate = req.body.address;
   // Encoder l'adresse pour gérer les espaces et intégrer l'adresse à l'url d'interrogation de l'API
   const encodedAddressToLocate = encodeURIComponent(addressToLocate);
@@ -80,7 +80,23 @@ router.get("/events", async function (req, res) {
 });
 
 
+//! Requête pour obtenir le nom du user à partir de l'id
 
+router.get("/byId", (req, res) => {
+  
+  Event.findOne({ _id: req.body.idUser}).then((data) => {
+    if (!data) {
+      // Gérer le cas où l'utilisateur n'est pas trouvé
+      res.json({ result: false, message: "Utilisateur non trouvé" });
+    } else {
+      // Répondre avec les données de l'utilisateur trouvé
+      res.json({ result: true, data: data });
+    }
+  }).catch((err) => {
+    // Gérer les erreurs possibles lors de la recherche
+    res.json({ result: false, message: "Une erreur s'est produite lors de la recherche de l'utilisateur" });
+  });
+});
 
 
 
