@@ -72,7 +72,7 @@ router.post("/publishEvent", async (req, res) => {
 //! ____________________________GET all events_________________________________________________________ 
 router.get("/events", async function (req, res) {
     try {
-        const events = await Event.find({});
+        const events = await Event.find({}).populate("creatorName");
         res.json(events);
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch events" });
