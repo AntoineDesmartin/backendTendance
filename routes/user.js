@@ -197,10 +197,18 @@ router.post("/mesEvents", (req, res) => {
 
 router.get("/byId", (req, res) => {
   
-  User.findById({ _id: req.body.idUser }).then((data) => {
+  User.findById(req.body.idUser).then((data) => {
+    if (!data) {
+      // Gérer le cas où l'utilisateur n'est pas trouvé
+      res.json({ result: false, message: "Utilisateur non trouvé" });
+    } else {
+      // Répondre avec les données de l'utilisateur trouvé
       res.json({ result: true, data: data });
-  })
+    }
+  }).catch((err) => {
+    // Gérer les erreurs possibles lors de la recherche
+    res.json({ result: false, message: "Une erreur s'est produite lors de la recherche de l'utilisateur" });
+  });
 });
-
 
 module.exports = router;
