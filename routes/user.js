@@ -197,7 +197,7 @@ router.post("/mesEvents", (req, res) => {
 
 router.get("/byId", (req, res) => {
   
-  User.findOne(req.body.idUser).then((data) => {
+  User.findOne({ _id: req.body.idUser}).then((data) => {
     if (!data) {
       // Gérer le cas où l'utilisateur n'est pas trouvé
       res.json({ result: false, message: "Utilisateur non trouvé" });
